@@ -79,9 +79,9 @@ export const ja: Translation = {
 	[Key.animeEmptyLocal]:
 		"src/data/anime.tsファイルにアニメの情報を追加してください",
 	[Key.animeConfigBilibili]:
-		"src/config.tsファイルにBilibiliのvmidを設定してください",
+		"src/config/siteConfig.tsファイルにBilibiliのvmidを設定してください",
 	[Key.animeConfigBangumi]:
-		"src/config.tsファイルにBangumiのユーザーIDを設定してください",
+		"src/config/siteConfig.tsファイルにBangumiのユーザーIDを設定してください",
 
 	// 日記ページ
 	[Key.diarySubtitle]: "いつでも、どこでも生活を共有",
@@ -189,8 +189,7 @@ export const ja: Translation = {
 	[Key.rssHowToUse]:
 		"このサイトの購読はFeedly、Inoreaderまたはその他のRSSリーダーの使用をおすすめします。",
 	[Key.rssCopied]: "RSSのリンクをクリップボードにコピーしました!",
-	[Key.rssCopyFailed]:
-		"コピーに失敗しました。リンクを手動で追加してください。",
+	[Key.rssCopyFailed]: "コピーに失敗しました。リンクを手動で追加してください。",
 
 	// Atomページ
 	[Key.atom]: "Atomフィード",
@@ -271,11 +270,11 @@ export const ja: Translation = {
 
 	// パスワード保護
 	[Key.passwordProtected]: "パスワードで保護されています",
-	[Key.passwordProtectedTitle]:
-		"このコンテンツはパスワードで保護されています",
+	[Key.passwordProtectedTitle]: "このコンテンツはパスワードで保護されています",
 	[Key.passwordProtectedDescription]:
 		"保護されたコンテンツを表示するにはパスワードを入力してください。",
 	[Key.postEncrypted]: "暗号化済み",
+	[Key.postEncryptedMessage]: "この記事は暗号化されています",
 	[Key.passwordPlaceholder]: "パスワードを入力",
 	[Key.passwordUnlock]: "ロックを解除",
 	[Key.passwordUnlocking]: "ロックを解除中...",
@@ -342,7 +341,7 @@ export const ja: Translation = {
 	[Key.copied]: "コピーしました",
 	[Key.copyLink]: "リンクをコピー",
 	[Key.savePoster]: "ポスターを保存",
-	[Key.scanToRead]: "スキャンで読み込む",
+	[Key.scanToRead]: "出典元",
 	[Key.shareOnSocial]: "共有",
 	[Key.shareOnSocialDescription]:
 		"この記事が役に立ったときは、ぜひ他の人に共有してください!",
