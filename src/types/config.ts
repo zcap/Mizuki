@@ -13,6 +13,7 @@ export interface SiteConfig {
 	siteURL: string; // 站点URL，以斜杠结尾，例如：https://mizuki.mysqil.com/
 	keywords?: string[]; // 站点关键词，用于生成 <meta name="keywords">
 	siteStartDate?: string; // 站点开始日期，格式：YYYY-MM-DD，用于计算运行天数
+	timeZone: string; // IANA 时区，用于将文章时间转换为站点日历日期
 
 	lang:
 		| "en"
@@ -41,6 +42,7 @@ export interface SiteConfig {
 		timeline: boolean; // 时间线页面开关
 		albums: boolean; // 相册页面开关
 		devices: boolean; // 设备页面开关
+		aiTools: boolean; // AI 工具页面开关
 	};
 
 	// 文章列表布局配置
@@ -53,6 +55,12 @@ export interface SiteConfig {
 		};
 	};
 
+	// 文章页超宽屏布局配置
+	ultrawidePostLayout?: {
+		enable: boolean; // 访客未手动切换时的初始状态
+		allowSwitch?: boolean; // 是否在设置面板中显示开关
+	};
+
 	// 顶栏标题配置
 	navbarTitle?: {
 		mode?: "text-icon" | "logo"; // 显示模式："text-icon" 显示图标+文本，"logo" 仅显示Logo
@@ -61,26 +69,14 @@ export interface SiteConfig {
 		logo?: string; // 网站Logo图片路径
 	};
 
-	// 页面自动缩放配置
+	// 旧版页面自动缩放配置
 	pageScaling?: {
-		enable: boolean; // 是否开启自动缩放
+		enable: boolean; // 默认关闭；启用时保留旧版根字号缩放行为
 		targetWidth?: number; // 目标宽度，低于此宽度时开始缩放
 	};
 
-	// 添加字体配置
-	font: {
-		asciiFont: {
-			fontFamily: string;
-			fontWeight: string | number;
-			localFonts: string[];
-			enableCompress: boolean;
-		};
-		cjkFont: {
-			fontFamily: string;
-			fontWeight: string | number;
-			localFonts: string[];
-			enableCompress: boolean;
-		};
+	font?: {
+		mode?: "custom" | "system"; // custom=加载 ZenMaruGothic、Loli 和 JetBrains Mono；system=不请求自定义字体
 	};
 
 	// 添加bangumi配置
@@ -213,6 +209,7 @@ export enum LinkPreset {
 	Projects = 7,
 	Skills = 8,
 	Timeline = 9,
+	AITools = 10,
 }
 
 export interface NavBarLink {
@@ -329,8 +326,29 @@ export interface BlogPostData {
 }
 
 export interface ExpressiveCodeConfig {
-	theme: string;
+	/** @deprecated 使用 darkTheme/lightTheme。 */
+	theme?: string;
+	darkTheme: string;
+	lightTheme: string;
+	defaultWrap: boolean;
 	hideDuringThemeTransition?: boolean; // 是否在主题切换时隐藏代码块
+	languageBadge: {
+		enable: boolean;
+	};
+	languageLogo: {
+		enable: boolean;
+		color?: "mono" | "original" | "theme" | `#${string}`;
+		excludedLangs?: string[];
+	};
+	collapsible: {
+		enable: boolean;
+		lineThreshold: number;
+		previewLines: number;
+		defaultCollapsed: boolean;
+	};
+	codeGroup: {
+		enable: boolean;
+	};
 }
 
 export interface AnnouncementConfig {
@@ -573,3 +591,16 @@ export interface ThirdPartyAnalyticsConfig {
 	enable: boolean; // 是否启用第三方统计（Microsoft Clarity），默认关闭
 	clarityId?: string; // Clarity 项目 ID
 }
+
+/**
+ * 递归可选类型，供 src/config/overrides/ 下的配置覆盖文件使用。
+ *
+ * `Partial<T>` 只把顶层键变成可选，无法表达「只改 themeColor.hue、其余取
+ * 默认值」这类部分覆盖；数组分支直接短路，避免 `string[]` 退化成
+ * `(string | undefined)[]`（数组在合并时本就整体替换）。
+ */
+export type DeepPartial<T> = T extends readonly unknown[]
+	? T
+	: T extends object
+		? { [K in keyof T]?: DeepPartial<T[K]> }
+		: T;
